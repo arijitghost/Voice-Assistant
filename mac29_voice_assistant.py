@@ -4,6 +4,9 @@ import speech_recognition as sr
 import wikipedia
 import webbrowser
 import smtplib
+import requests
+from bs4 import BeautifulSoup
+
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice',voices[0].id)
@@ -91,7 +94,14 @@ while True:
         speak("Yes sir I will. Because you are totally mad like me...and you are beyond the humans brain.")
  
  
- 
+ elif 'temperature' in query:
+        speak("Which place's temperature you want to know sir...")
+        search = takeCommand()
+        url = f"https://www.google.com/search?q={search}"
+        r = requests.get(url)
+        data = BeautifulSoup(r.text,"html.parser")
+        temp = data.find("div",class_="BNeawe").text
+        speak(f"current {search} is {temp}")
  
  
  elif 'shutdown' in query:
